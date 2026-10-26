@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="my">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0d"><meta name="description" content="GoldNote - personal, business and learning notes">
+<link rel="manifest" href="manifest.webmanifest">
+<title>GoldNote — ကိုယ်ပိုင်မှတ်စု</title>
+<style>
+:root{--bg:#0b0b0d;--panel:#151518;--panel2:#1d1d21;--gold:#d8b15a;--gold2:#f1d58c;--muted:#a5a3a0;--text:#f6f2e9;--line:#333137;--red:#e87979}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans Myanmar",sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}
+.app{max-width:780px;margin:auto;min-height:100dvh;padding:0 16px 96px}
+header{position:sticky;top:0;z-index:3;background:#0b0b0def;backdrop-filter:blur(12px);padding:18px 0 12px;border-bottom:1px solid #29272a}
+.brand{display:flex;align-items:center;gap:10px}.mark{width:40px;height:40px;border:1px solid var(--gold);border-radius:13px;display:grid;place-items:center;color:var(--gold);font-size:21px}.brand h1{font-size:21px;letter-spacing:.5px;margin:0}.brand small{color:var(--muted);display:block;font-size:11px;letter-spacing:1.5px}
+.searchrow{display:flex;gap:8px;margin-top:15px}.searchrow input{flex:1}
+input,textarea,select{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px;width:100%;outline:none}input:focus,textarea:focus,select:focus{border-color:var(--gold)}textarea{resize:vertical;min-height:160px;line-height:1.7}
+.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:12px;padding:10px 13px}.btn.gold{background:var(--gold);color:#17130a;border-color:var(--gold);font-weight:700}.btn.icon{min-width:44px;font-size:18px}.btn.danger{color:var(--red)}
+h2{font-size:17px;margin:23px 0 12px}.muted{color:var(--muted);font-size:13px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:16px}.stat{background:var(--panel);border:1px solid var(--line);padding:12px;border-radius:14px}.stat b{display:block;font-size:21px;color:var(--gold)}.stat span{font-size:11px;color:var(--muted)}
+.chips{display:flex;gap:8px;overflow:auto;padding:4px 0 9px}.chip{white-space:nowrap;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:30px;padding:8px 13px}.chip.active{border-color:var(--gold);background:#d8b15a1a;color:var(--gold2)}
+.note-list{display:grid;gap:10px}.note{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:14px;text-align:left;color:var(--text);width:100%}.note-top{display:flex;justify-content:space-between;gap:10px;align-items:center}.note h3{font-size:15px;margin:0;overflow-wrap:anywhere}.tag{font-size:11px;color:var(--gold2);background:#d8b15a1a;border-radius:7px;padding:4px 7px;white-space:nowrap}.preview{font-size:13px;color:#c1bfbb;margin:9px 0;white-space:pre-wrap;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.note-foot{display:flex;justify-content:space-between;color:var(--muted);font-size:11px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#111114f2;backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:10px max(16px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom));display:flex;justify-content:center;z-index:4}.bottom-inner{width:100%;max-width:748px;display:flex;gap:8px}.bottom button{flex:1}
+.screen{display:none}.screen.active{display:block}.formgrid{display:grid;gap:12px}.label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.task{display:flex;align-items:flex-start;gap:9px;padding:10px 0;border-bottom:1px solid var(--line)}.task input{width:18px;margin-top:3px;accent-color:var(--gold)}.task.done span{text-decoration:line-through;color:var(--muted)}.hidden{display:none!important}
+#lockScreen{position:fixed;inset:0;background:var(--bg);z-index:20;display:grid;place-items:center;padding:24px}#lockScreen .lockbox{width:min(360px,100%);text-align:center}.lockbox .mark{margin:0 auto 12px;width:58px;height:58px;font-size:28px}.lockbox h2{font-size:24px}
+.modalback{position:fixed;inset:0;background:#000b;z-index:10;display:grid;place-items:center;padding:15px}.modal{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;width:min(460px,100%);max-height:85dvh;overflow:auto}.modal h2{margin-top:0}.toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:var(--gold);color:#17130a;padding:10px 15px;border-radius:12px;z-index:30;font-size:13px;max-width:90%;display:none}
+footer{margin-top:28px;border-top:1px solid var(--line);padding-top:14px}
+@media(min-width:600px){.note-list{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{gap:12px}.app{padding-left:22px;padding-right:22px}}
+</style>
+</head>
+<body>
+<div id="lockScreen" class="hidden"><div class="lockbox"><div class="mark">✦</div><h2>GoldNote</h2><p class="muted">သင့်မှတ်စုများကို ပြန်ဖွင့်ရန် PIN ထည့်ပါ</p><input id="unlockPin" type="password" inputmode="numeric" placeholder="PIN" maxlength="12"><button class="btn gold" style="width:100%;margin-top:10px" id="unlockBtn">Unlock</button><p class="muted" id="unlockMsg"></p></div></div>
+<div class="app">
+<header><div class="brand"><div class="mark">✦</div><div><h1>GoldNote</h1><small>YOUR PRIVATE KNOWLEDGE SPACE</small></div></div>
+<div class="searchrow"><input id="search" placeholder="🔎 မှတ်စု ရှာရန်..." aria-label="Search notes"><button class="btn icon" id="settingsBtn" title="Settings">⚙</button></div></header>
+<section id="home" class="screen active">
+<div class="stats"><div class="stat"><b id="noteCount">0</b><span>မှတ်စုများ</span></div><div class="stat"><b id="taskCount">0</b><span>လုပ်ရန်ကျန်</span></div><div class="stat"><b id="folderCount">4</b><span>အမျိုးအစား</span></div></div>
+<h2>အမျိုးအစားများ</h2><div class="chips" id="categoryChips"></div>
+<div class="row"><h2 style="flex:1">သင့်မှတ်စုများ</h2><select id="sort" style="max-width:145px;padding:9px"><option value="new">အသစ်ဆုံး</option><option value="old">အဟောင်းဆုံး</option><option value="az">အမည်စဉ်</option></select></div>
+<div id="noteList" class="note-list"></div><p id="empty" class="muted hidden">မှတ်စုမရှိသေးပါ။ “+ Note အသစ်” ကိုနှိပ်ပြီး စတင်ရေးသားပါ။</p>
+</section>
+<section id="editor" class="screen">
+<div class="row" style="margin-top:18px"><button class="btn" id="backBtn" style="flex:0 0 auto">← နောက်သို့</button><span class="muted" id="saveStatus" style="text-align:right">အလိုအလျောက်သိမ်းမည်</span></div>
+<h2 id="editorHeading">မှတ်စုအသစ်</h2>
+<div class="formgrid">
+<label><span class="label">ခေါင်းစဉ်</span><input id="title" placeholder="မှတ်စုခေါင်းစဉ်"></label>
+<div class="row"><label><span class="label">အမျိုးအစား</span><select id="category"><option>ကိုယ်ပိုင်</option><option>လုပ်ငန်း</option><option>လေ့လာမှု</option><option>အရေးကြီး</option></select></label><label><span class="label">အရောင်/ဦးစားပေး</span><select id="priority"><option value="normal">ပုံမှန်</option><option value="important">အရေးကြီး</option></select></label></div>
+<label><span class="label">မှတ်စုအကြောင်းအရာ</span><textarea id="body" placeholder="ဒီနေရာမှာ ရေးသားပါ..."></textarea></label>
+<div class="toolbar"><button class="btn" id="voiceBtn">🎙 အသံမှ စာသား</button><button class="btn" id="addChecklistBtn">☑ Checklist ထည့်ရန်</button><button class="btn" id="addTaskBtn">＋ လုပ်ရန်အချက်</button></div>
+<div id="checklistBox" class="hidden"><h2>လုပ်ရန်စာရင်း</h2><div id="taskItems"></div><div class="row"><input id="newTask" placeholder="လုပ်ရန်အချက်အသစ်"><button class="btn gold" id="createTask">ထည့်မည်</button></div></div>
+<div class="toolbar"><button class="btn gold" id="saveBtn">သိမ်းမည်</button><button class="btn danger" id="deleteBtn">ဖျက်မည်</button></div>
+<p class="muted">မှတ်စုများကို ဒီ browser/device ထဲတွင် သိမ်းဆည်းသည်။ Backup လုပ်ရန် Settings ကိုဖွင့်ပါ။</p>
+</div></section>
+<section id="settings" class="screen"><h2>⚙ Settings & Backup</h2>
+<div class="formgrid">
+<div class="stat"><b style="font-size:15px">🔐 Privacy Lock</b><p class="muted">PIN ဖြင့် app ကို lock/unlock လုပ်ပါ။ ဤ prototype တွင် PIN lock သည် app မျက်နှာပြင်ကိုသာ ကာကွယ်ပြီး ဒေတာကို အပြည့်အဝ encrypt မလုပ်ပါ။</p><div class="row"><input id="newPin" type="password" inputmode="numeric" maxlength="12" placeholder="PIN အသစ် (အနည်းဆုံး 4 လုံး)"><button class="btn gold" id="setPinBtn">PIN သတ်မှတ်</button></div><button class="btn" id="lockNow" style="margin-top:9px">ယခု Lock လုပ်မည်</button><button class="btn danger" id="removePin" style="margin-top:9px">PIN ဖယ်ရှားမည်</button></div>
+<div class="stat"><b style="font-size:15px">📦 Backup / Restore</b><p class="muted">JSON ဖိုင်အဖြစ် export လုပ်ပြီး လုံခြုံသောနေရာတွင် သိမ်းထားပါ။ Restore လုပ်လျှင် လက်ရှိမှတ်စုများနှင့် ပေါင်းထည့်မည်။ Cloud sync ကို မချိတ်ဆက်ရသေးပါ။</p><div class="toolbar"><button class="btn gold" id="exportBtn">Backup ထုတ်မည်</button><label class="btn" style="text-align:center">Backup ပြန်ထည့်မည်<input id="importFile" type="file" accept=".json,application/json" class="hidden"></label></div></div>
+<div class="stat"><b style="font-size:15px">📁 Categories</b><p class="muted">အခြေခံအမျိုးအစားများ — ကိုယ်ပိုင်၊ လုပ်ငန်း၊ လေ့လာမှု၊ အရေးကြီး။</p></div>
+<div class="stat"><b style="font-size:15px">🎙 Voice Notes</b><p class="muted">Browser ၏ speech recognition ကိုအသုံးပြုသည်။ Android Chrome တွင်အလုပ်လုပ်နိုင်သော်လည်း browser/device နှင့် internet ချိတ်ဆက်မှုအပေါ်မူတည်သည်။ Audio recording ဖိုင်ကို မသိမ်းပါ။</p></div>
+</div></section>
+<footer class="muted">GoldNote • Black & Gold • Prototype v1.0</footer>
+</div>
+<nav class="bottom"><div class="bottom-inner"><button class="btn" id="homeBtn">⌂ Notes</button><button class="btn gold" id="newBtn">＋ Note အသစ်</button><button class="btn" id="settingsNav">⚙ Settings</button></div></nav>
+<div id="toast" class="toast"></div>
+<script>
+const KEY='goldnote.notes.v1', PINKEY='goldnote.pin.v1';
+let notes=[], currentId=null, activeCategory='အားလုံး', recognition=null, toastTimer;
+const $=id=>document.getElementById(id);
+const cats=['အားလုံး','ကိုယ်ပိုင်','လုပ်ငန်း','လေ့လာမှု','အရေးကြီး'];
+function load(){try{notes=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(notes))notes=[]}catch{notes=[]}}
+function persist(){localStorage.setItem(KEY,JSON.stringify(notes));render();$('saveStatus').textContent='သိမ်းပြီး ✓'}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function toast(s){$('toast').textContent=s;$('toast').style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').style.display='none',2300)}
+function escapeHtml(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function showScreen(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0);if(id==='home')render()}
+function render(){
+ $('noteCount').textContent=notes.length;$('taskCount').textContent=notes.reduce((n,x)=>n+(x.tasks||[]).filter(t=>!t.done).length,0);
+ $('folderCount').textContent=4;
+ $('categoryChips').innerHTML=cats.map(c=>`<button class="chip ${activeCategory===c?'active':''}" data-cat="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join('');
+ $('categoryChips').querySelectorAll('button').forEach(b=>b.onclick=()=>{activeCategory=b.dataset.cat;render()});
+ const q=$('search').value.trim().toLowerCase(), sort=$('sort').value;
+ let arr=notes.filter(n=>(activeCategory==='အားလုံး'||n.category===activeCategory)&&(!q||[n.title,n.body,n.category,...(n.tasks||[]).map(t=>t.text)].join(' ').toLowerCase().includes(q)));
+ arr.sort((a,b)=>sort==='az'?(a.title||'').localeCompare(b.title||''):sort==='old'?(a.updated||0)-(b.updated||0):(b.updated||0)-(a.updated||0));
+ $('noteList').innerHTML=arr.map(n=>`<button class="note" data-id="${n.id}"><div class="note-top"><h3>${escapeHtml(n.title||'Untitled note')}</h3><span class="tag">${escapeHtml(n.category||'ကိုယ်ပိုင်')}${n.priority==='important'?' ★':''}</span></div><div class="preview">${escapeHtml(n.body||((n.tasks||[]).map(t=>(t.done?'✓ ':'□ ')+t.text).join('\\n'))||'အကြောင်းအရာမရှိသေးပါ')}</div><div class="note-foot"><span>${(n.tasks||[]).filter(t=>t.done).length}/${(n.tasks||[]).length} tasks ပြီး</span><span>${new Date(n.updated||Date.now()).toLocaleDateString()}</span></div></button>`).join('');
+ $('noteList').querySelectorAll('button').forEach(b=>b.onclick=()=>openNote(b.dataset.id));
+ $('empty').classList.toggle('hidden',arr.length!==0);
+}
+function fresh(){currentId=null;$('editorHeading').textContent='မှတ်စုအသစ်';$('title').value='';$('body').value='';$('category').value='ကိုယ်ပိုင်';$('priority').value='normal';$('deleteBtn').classList.add('hidden');$('checklistBox').classList.add('hidden');$('taskItems').innerHTML='';$('saveStatus').textContent='အလိုအလျောက်သိမ်းမည်';showScreen('editor')}
+function openNote(id){const n=notes.find(x=>x.id===id);if(!n)return;currentId=id;$('editorHeading').textContent='မှတ်စုကို ပြင်ဆင်ရန်';$('title').value=n.title||'';$('body').value=n.body||'';$('category').value=n.category||'ကိုယ်ပိုင်';$('priority').value=n.priority||'normal';$('deleteBtn').classList.remove('hidden');$('checklistBox').classList.toggle('hidden',!(n.tasks||[]).length);renderTasks(n.tasks||[]);showScreen('editor')}
+function renderTasks(tasks){$('taskItems').innerHTML=tasks.map((t,i)=>`<div class="task ${t.done?'done':''}"><input type="checkbox" data-task="${i}" ${t.done?'checked':''}><span style="flex:1">${escapeHtml(t.text)}</span><button class="btn danger" data-del-task="${i}" style="padding:3px 8px">×</button></div>`).join('');$('taskItems').querySelectorAll('[data-task]').forEach(c=>c.onchange=()=>{const n=getCurrent();if(!n)return;n.tasks[c.dataset.task].done=c.checked;n.updated=Date.now();persist();renderTasks(n.tasks)});$('taskItems').querySelectorAll('[data-del-task]').forEach(b=>b.onclick=()=>{const n=getCurrent();if(!n)return;n.tasks.splice(+b.dataset.delTask,1);n.updated=Date.now();persist();renderTasks(n.tasks)})}
+function getCurrent(){return notes.find(n=>n.id===currentId)}
+function save(){let n=getCurrent();if(!n){n={id:uid(),created:Date.now(),tasks:[]};notes.push(n);currentId=n.id}n.title=$('title').value.trim()||'ခေါင်းစဉ်မရှိသောမှတ်စု';n.body=$('body').value;n.category=$('category').value;n.priority=$('priority').value;n.updated=Date.now();persist();$('editorHeading').textContent='မှတ်စုကို ပြင်ဆင်ရန်';$('deleteBtn').classList.remove('hidden');toast('မှတ်စု သိမ်းပြီးပါပြီ')}
+function saveDraft(){if(currentId){const n=getCurrent();if(n){n.title=$('title').value.trim()||'ခေါင်းစဉ်မရှိသောမှတ်စု';n.body=$('body').value;n.category=$('category').value;n.priority=$('priority').value;n.updated=Date.now();localStorage.setItem(KEY,JSON.stringify(notes));$('saveStatus').textContent='သိမ်းပြီး ✓';render()}}}
+let draftTimer;['title','body','category','priority'].forEach(id=>$(id).addEventListener(id==='category'||id==='priority'?'change':'input',()=>{if(currentId){$('saveStatus').textContent='သိမ်းနေသည်…';clearTimeout(draftTimer);draftTimer=setTimeout(saveDraft,450)}}));
+$('newBtn').onclick=fresh;$('homeBtn').onclick=()=>showScreen('home');$('settingsNav').onclick=$('settingsBtn').onclick=()=>showScreen('settings');$('backBtn').onclick=()=>{if(currentId)saveDraft();showScreen('home')};$('saveBtn').onclick=save;
+$('deleteBtn').onclick=()=>{if(!currentId)return;if(confirm('ဒီမှတ်စုကို ဖျက်မှာသေချာပါသလား။')){notes=notes.filter(n=>n.id!==currentId);localStorage.setItem(KEY,JSON.stringify(notes));currentId=null;showScreen('home');toast('ဖျက်ပြီးပါပြီ')}};
+$('search').oninput=render;$('sort').onchange=render;
+$('addChecklistBtn').onclick=()=>{$('checklistBox').classList.toggle('hidden');if(!currentId)save();};
+$('addTaskBtn').onclick=()=>{$('checklistBox').classList.remove('hidden');if(!currentId)save();$('newTask').focus()};
+$('createTask').onclick=()=>{const text=$('newTask').value.trim();if(!text)return;if(!currentId)save();const n=getCurrent();n.tasks=n.tasks||[];n.tasks.push({text,done:false});n.updated=Date.now();$('newTask').value='';persist();renderTasks(n.tasks)};
+$('newTask').addEventListener('keydown',e=>{if(e.key==='Enter')$('createTask').click()});
+$('voiceBtn').onclick=()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){toast('ဒီ browser မှာ Speech-to-text မရနိုင်ပါ။ Android Chrome နဲ့ စမ်းကြည့်ပါ။');return}if(recognition){recognition.stop();recognition=null;$('voiceBtn').textContent='🎙 အသံမှ စာသား';return}recognition=new SR();recognition.lang='my-MM';recognition.interimResults=true;recognition.continuous=true;$('voiceBtn').textContent='⏹ ရပ်မည်';recognition.onresult=e=>{let out='';for(let i=e.resultIndex;i<e.results.length;i++)out+=e.results[i][0].transcript;$('body').value+=out;};recognition.onerror=()=>toast('အသံမှတ်သားမှု မအောင်မြင်ပါ။ Browser permission ကိုစစ်ပါ။');recognition.onend=()=>{recognition=null;$('voiceBtn').textContent='🎙 အသံမှ စာသား';if(currentId)saveDraft()};try{recognition.start();toast('ပြောပါ… ပြီးလျှင် ရပ်မည်ကိုနှိပ်ပါ')}catch{toast('Microphone ကို စတင်မရပါ')}}
+$('exportBtn').onclick=()=>{const data={app:'GoldNote',version:1,exportedAt:new Date().toISOString(),notes};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='GoldNote-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href);toast('Backup ဖိုင်ထုတ်ပြီးပါပြီ')};
+$('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());const incoming=Array.isArray(data)?data:data.notes;if(!Array.isArray(incoming))throw Error('invalid');let added=0;incoming.forEach(n=>{if(n&&typeof n==='object'&&!notes.some(x=>x.id===n.id)){notes.push({...n,id:n.id||uid()});added++}});localStorage.setItem(KEY,JSON.stringify(notes));render();toast(added+' ခု ပြန်ထည့်ပြီးပါပြီ')}catch{toast('Backup ဖိုင် မမှန်ပါ')}e.target.value=''};
+$('setPinBtn').onclick=()=>{const p=$('newPin').value;if(p.length<4){toast('PIN အနည်းဆုံး 4 လုံး ထည့်ပါ');return}localStorage.setItem(PINKEY,p);$('newPin').value='';toast('PIN သတ်မှတ်ပြီးပါပြီ')};
+$('removePin').onclick=()=>{if(confirm('PIN ကို ဖယ်ရှားမလား။')){localStorage.removeItem(PINKEY);toast('PIN ဖယ်ရှားပြီးပါပြီ')}};
+$('lockNow').onclick=()=>{if(!localStorage.getItem(PINKEY)){toast('အရင် PIN သတ်မှတ်ပါ');return}$('lockScreen').classList.remove('hidden');$('unlockPin').value='';$('unlockMsg').textContent='';};
+$('unlockBtn').onclick=()=>{if($('unlockPin').value===localStorage.getItem(PINKEY)){$('lockScreen').classList.add('hidden');$('unlockMsg').textContent=''}else $('unlockMsg').textContent='PIN မမှန်ပါ'};
+$('unlockPin').addEventListener('keydown',e=>{if(e.key==='Enter')$('unlockBtn').click()});
+load();render();
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script></body></html>
